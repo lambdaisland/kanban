@@ -25,10 +25,10 @@
   [:div.new-column
    "+ add new column"])
 
-(defn Board []
+(defn Board [state]
   [:div.board
    [Column]
    [Column]
    [NewColumn]])
 
-(r/render [Board] (js/document.getElementById "app"))
+(r/render [Board app-state] (js/document.getElementById "app"))
