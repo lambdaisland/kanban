@@ -3,7 +3,11 @@
 
 (enable-console-print!)
 
-(defonce app-state (r/atom {:text "Hello Chestnut!"}))
+(def app-state
+  (r/atom {:columns [{:title "Todos"
+                      :cards [{:title "Learn about Reagent"}
+                              {:title "Tell my friends about Lambda Island"}]}]}))
+
 
 (defn Card []
   [:div.card
