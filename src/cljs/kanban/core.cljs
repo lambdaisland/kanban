@@ -9,7 +9,8 @@
                               {:title "Tell my friends about Lambda Island"}]}
                      {:title "Awesomize"
                       :cards [{:title "Meditate"}
-                              {:title "Work out"}]}]}))
+                              {:title "Work out"
+                               :editing true}]}]}))
 
 (defn Card [card]
   [:div.card
