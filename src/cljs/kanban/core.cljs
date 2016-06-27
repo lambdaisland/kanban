@@ -13,8 +13,9 @@
                                :editing true}]}]}))
 
 (defn Card [card]
-  [:div.card
-   (:title card)])
+  (if (:editing card)
+    [:div.card.editing [:input {:type "text" :value (:title card)}]]
+    [:div.card (:title card)]))
 
 (defn NewCard []
   [:div.new-card
