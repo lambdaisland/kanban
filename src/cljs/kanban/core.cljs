@@ -1,9 +1,9 @@
 (ns kanban.core
-  (:require [reagent.core :as reagent :refer [atom]]))
+  (:require [reagent.core :as r]))
 
 (enable-console-print!)
 
-(defonce app-state (atom {:text "Hello Chestnut!"}))
+(defonce app-state (r/atom {:text "Hello Chestnut!"}))
 
 (defn Card []
   [:div.card
@@ -27,4 +27,4 @@
    [Column]
    [NewColumn]])
 
-(reagent/render [Board] (js/document.getElementById "app"))
+(r/render [Board] (js/document.getElementById "app"))
