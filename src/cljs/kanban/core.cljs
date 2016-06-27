@@ -27,8 +27,8 @@
 
 (defn Board [state]
   [:div.board
-   [Column]
-   [Column]
+   (for [c (:columns @state)]
+     [Column c])
    [NewColumn]])
 
 (r/render [Board app-state] (js/document.getElementById "app"))
