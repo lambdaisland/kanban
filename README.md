@@ -1,5 +1,6 @@
 # kanban
 
+Sample code from [Lambda Island](https://lambdaisland.com) Episode 9. [Reagent](https://lambdaisland.com/episodes/reagent).
 
 ## Development
 
