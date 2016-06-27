@@ -8,10 +8,9 @@
                       :cards [{:title "Learn about Reagent"}
                               {:title "Tell my friends about Lambda Island"}]}]}))
 
-
-(defn Card []
+(defn Card [card]
   [:div.card
-   "a card"])
+   (:title card)])
 
 (defn NewCard []
   [:div.new-card
