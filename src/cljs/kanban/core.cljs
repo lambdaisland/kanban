@@ -6,10 +6,16 @@
 (defonce app-state (atom {:text "Hello Chestnut!"}))
 
 (defn Card []
-  [:div.card])
-(defn Column []
-  [:div.column])
-(defn Board []
-  [:div.board])
+  [:div.card
+   "a card"])
 
-(reagent/render [greeting] (js/document.getElementById "app"))
+(defn Column []
+  [:div.column
+   [:h2 "a column"]])
+
+(defn Board []
+  [:div.board
+   [Column]
+   [Column]])
+
+(reagent/render [Board] (js/document.getElementById "app"))
