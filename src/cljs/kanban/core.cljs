@@ -6,7 +6,10 @@
 (def app-state
   (r/atom {:columns [{:title "Todos"
                       :cards [{:title "Learn about Reagent"}
-                              {:title "Tell my friends about Lambda Island"}]}]}))
+                              {:title "Tell my friends about Lambda Island"}]}
+                     {:title "Awesomize"
+                      :cards [{:title "Meditate"}
+                              {:title "Work out"}]}]}))
 
 (defn Card [card]
   [:div.card
