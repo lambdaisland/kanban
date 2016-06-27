@@ -8,6 +8,7 @@
                       :cards [{:title "Learn about Reagent"}
                               {:title "Tell my friends about Lambda Island"}]}
                      {:title "Awesomize"
+                      :editing true
                       :cards [{:title "Meditate"}
                               {:title "Work out"
                                :editing true}]}]}))
@@ -21,9 +22,11 @@
   [:div.new-card
    "+ add new card"])
 
-(defn Column [{:keys [title cards]}]
+(defn Column [{:keys [title cards editing]}]
   [:div.column
-   [:h2 title]
+   (if editing
+     [:input {:type "text" :value title}]
+     [:h2 title])
    (for [c cards]
      [Card c])
    [NewCard]])
