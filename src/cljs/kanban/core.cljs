@@ -5,7 +5,11 @@
 
 (defonce app-state (atom {:text "Hello Chestnut!"}))
 
-(defn greeting []
-  [:h1 (:text @app-state)])
+(defn Card []
+  [:div.card])
+(defn Column []
+  [:div.column])
+(defn Board []
+  [:div.board])
 
 (reagent/render [greeting] (js/document.getElementById "app"))
