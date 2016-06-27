@@ -1,3 +1,33 @@
-h1 {
-  text-decoration: underline;
+.card {
+    background-color:  #fafafa;
+    border-radius: 0.2em;
+    padding: 0.5em;
+    margin: 0.5em;
+}
+
+.card.editing {
+    padding: 0;
+}
+
+.card.editing input {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+.column, .new-column {
+    width: 200px;
+    float: left;
+    padding: 0.1em 0.5em;
+    border-radius: 0.2em;
+    background-color:  #cccccc;
+    margin: 0.5em;
+}
+
+.new-card, .new-column {
+    padding: 0.5em;
+    background-color:  #aaaaaa;
+    border: 1px solid #cccccc;
+    border-radius: 0.2em;
+    margin: 0.5em;
 }
