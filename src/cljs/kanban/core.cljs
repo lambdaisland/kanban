@@ -17,9 +17,12 @@
   [:div.new-card
    "+ add new card"])
 
-(defn Column []
+(defn Column [{:keys [title cards]}]
   [:div.column
-   [:h2 "a column"]])
+   [:h2 title]
+   (for [c cards]
+     [Card c])
+   [NewCard]])
 
 (defn NewColumn []
   [:div.new-column
