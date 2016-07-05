@@ -29,17 +29,24 @@
                                     :title ""
                                     :editing true}))
 
+(defn AutoFocusInput [props]
+  (r/create-class
+   {:display-name  "FocusInput"
+    :component-did-mount (fn [component]
+                           (.focus (r/dom-node component)))
+    :reagent-render (fn [props]
+                      [:input props])}))
+
 (defn Editable [cursor element]
   (let [{:keys [title editing] :as item} @cursor]
     (if editing
       [element {:className "editing"}
-       [:input {:type "text"
-                :value title
-                :on-blur #(stop-editing cursor)
-                :on-change #(update-title-text % cursor)
-                :on-key-press #(if (= (.. % -charCode) 13)
-                                 (stop-editing cursor))
-                :autoFocus true}]]
+       [AutoFocusInput {:type "text"
+                    :value title
+                    :on-blur #(stop-editing cursor)
+                    :on-change #(update-title-text % cursor)
+                    :on-key-press #(if (= (.. % -charCode) 13)
+                                     (stop-editing cursor))}]]
       [element {:on-click #(swap! cursor assoc :editing true)} title])))
 
 (defn Card [cur]
