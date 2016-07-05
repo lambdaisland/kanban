@@ -8,28 +8,28 @@
                       :cards [{:title "Learn about Reagent"}
                               {:title "Tell my friends about Lambda Island"}]}
                      {:title "Awesomize"
-                      :editing true
                       :cards [{:title "Meditate"}
-                              {:title "Work out"
-                               :editing true}]}]}))
+                              {:title "Work out"}]}]}))
 
-(defn Card [card]
-  (if (:editing card)
-    [:div.card.editing [:input {:type "text" :value (:title card)}]]
-    [:div.card (:title card)]))
+(defn Card [c]
+  (let [card @c]
+    (if (:editing card)
+      [:div.card.editing [:input {:type "text" :value (:title card)}]]
+      [:div.card (:title card)])))
 
 (defn NewCard []
   [:div.new-card
    "+ add new card"])
 
-(defn Column [{:keys [title cards editing]}]
-  [:div.column
-   (if editing
-     [:input {:type "text" :value title}]
-     [:h2 title])
-   (for [c cards]
-     [Card c])
-   [NewCard]])
+(defn Column [col]
+  (let [{:keys [title cards editing]} @col]
+    [:div.column
+     (if editing
+       [:input {:type "text" :value title}]
+       [:h2 title])
+     (for [i (-> cards count range)]
+       [Card (r/cursor col [:cards i])])
+     [NewCard]]))
 
 (defn NewColumn []
   [:div.new-column
@@ -37,8 +37,8 @@
 
 (defn Board [state]
   [:div.board
-   (for [c (:columns @state)]
-     [Column c])
+   (for [i (-> @state :columns count range)]
+     [Column (r/cursor state [:columns i])])
    [NewColumn]])
 
 (r/render [Board app-state] (js/document.getElementById "app"))
