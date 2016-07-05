@@ -57,8 +57,15 @@
        ^{:key k} [Card (r/cursor colcur [:cards i])])
      [NewCard colcur]]))
 
-(defn NewColumn []
+(defn- insert-new-column [colscur]
+  (swap! colscur conj {:id (random-uuid)
+                       :title ""
+                       :cards []
+                       :editing true}))
+
+(defn NewColumn [colscur]
   [:div.new-column
+   {:on-click #(insert-new-column colscur)}
    "+ add new column"])
 
 (defn Board [app-state]
@@ -67,6 +74,6 @@
      (for [i (-> columns count range)
            :let [k (-> columns (get i) :id)]]
        ^{:key k} [Column (r/cursor app-state [:columns i])])
-     [NewColumn ]]))
+     [NewColumn (r/cursor app-state [:columns]) ]]))
 
 (r/render [Board app-state] (js/document.getElementById "app"))
