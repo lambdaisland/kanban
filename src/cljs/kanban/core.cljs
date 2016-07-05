@@ -3,19 +3,29 @@
 
 (enable-console-print!)
 
-(def app-state
-  (r/atom {:columns [{:title "Todos"
-                      :cards [{:title "Learn about Reagent"}
-                              {:title "Tell my friends about Lambda Island"}]}
-                     {:title "Awesomize"
-                      :cards [{:title "Meditate"}
-                              {:title "Work out"}]}]}))
+(defonce app-state
+  (r/atom {:columns [{:id (random-uuid)
+                      :title "Todos"
+                      :cards [{:id (random-uuid)
+                               :title "Learn about Reagent"}
+                              {:id (random-uuid)
+                               :title "Tell my friends about Lambda Island"}]}
+                     {:id (random-uuid)
+                      :title "Awesomize"
+                      :cards [{:id (random-uuid)
+                               :title "Meditate"}
+                              {:id (random-uuid)
+                               :title "Work out"}]}]}))
 
-(defn Card [c]
-  (let [card @c]
+
+(defn Card [cur]
+  (let [card @cur]
     (if (:editing card)
-      [:div.card.editing [:input {:type "text" :value (:title card)}]]
-      [:div.card (:title card)])))
+      [:div.card.editing [:input {:type "text"
+                                  :value (:title card)
+                                  :on-blur #(swap! cur dissoc :editing)
+                                  :on-change #(swap! cur assoc :title (.. % -target -value))}]]
+      [:div.card {:on-click #(swap! cur assoc :editing true)} (:title card)])))
 
 (defn NewCard []
   [:div.new-card
@@ -27,18 +37,21 @@
      (if editing
        [:input {:type "text" :value title}]
        [:h2 title])
-     (for [i (-> cards count range)]
-       [Card (r/cursor col [:cards i])])
+     (for [i (-> cards count range)
+           :let [k (-> cards (get i) :id)]]
+       ^{:key k} [Card (r/cursor col [:cards i])])
      [NewCard]]))
 
 (defn NewColumn []
   [:div.new-column
    "+ add new column"])
 
-(defn Board [state]
-  [:div.board
-   (for [i (-> @state :columns count range)]
-     [Column (r/cursor state [:columns i])])
-   [NewColumn]])
+(defn Board [app-state]
+  (let [{:keys [columns]} @app-state]
+    [:div.board
+     (for [i (-> columns count range)
+           :let [k (-> columns (get i) :id)]]
+       ^{:key k} [Column (r/cursor app-state [:columns i])])
+     [NewColumn]]))
 
 (r/render [Board app-state] (js/document.getElementById "app"))
