@@ -29,17 +29,21 @@
                                     :title ""
                                     :editing true}))
 
+(defn Editable [cursor element]
+  (let [{:keys [title editing] :as item} @cursor]
+    (if editing
+      [element {:className "editing"}
+       [:input {:type "text"
+                :value title
+                :on-blur #(stop-editing cursor)
+                :on-change #(update-title-text % cursor)
+                :on-key-press #(if (= (.. % -charCode) 13)
+                                 (stop-editing cursor))
+                :autoFocus true}]]
+      [element {:on-click #(swap! cursor assoc :editing true)} title])))
+
 (defn Card [cur]
-  (let [card @cur]
-    (if (:editing card)
-      [:div.card.editing [:input {:type "text"
-                                  :value (:title card)
-                                  :on-blur #(stop-editing cur)
-                                  :on-change #(update-title-text % cur)
-                                  :on-key-press #(if (= (.. % -charCode) 13)
-                                                   (stop-editing cur))
-                                  :autoFocus true}]]
-      [:div.card {:on-click #(swap! cur assoc :editing true)} (:title card)])))
+  [Editable cur :div.card])
 
 (defn NewCard [colcur]
   [:div.new-card
@@ -49,9 +53,7 @@
 (defn Column [colcur]
   (let [{:keys [title cards editing]} @colcur]
     [:div.column
-     (if editing
-       [:input {:type "text" :value title}]
-       [:h2 title])
+     [Editable colcur :h2]
      (for [i (-> cards count range)
            :let [k (-> cards (get i) :id)]]
        ^{:key k} [Card (r/cursor colcur [:cards i])])
