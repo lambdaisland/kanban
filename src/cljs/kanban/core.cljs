@@ -18,29 +18,44 @@
                                :title "Work out"}]}]}))
 
 
+(defn stop-editing [cur]
+  (swap! cur dissoc :editing))
+
+(defn update-title-text [event cur]
+  (swap! cur assoc :title (.. event -target -value)))
+
+(defn insert-new-card [colcur]
+  (swap! colcur update :cards conj {:id (random-uuid)
+                                    :title ""
+                                    :editing true}))
+
 (defn Card [cur]
   (let [card @cur]
     (if (:editing card)
       [:div.card.editing [:input {:type "text"
                                   :value (:title card)
-                                  :on-blur #(swap! cur dissoc :editing)
-                                  :on-change #(swap! cur assoc :title (.. % -target -value))}]]
+                                  :on-blur #(stop-editing cur)
+                                  :on-change #(update-title-text % cur)
+                                  :on-key-press #(if (= (.. % -charCode) 13)
+                                                   (stop-editing cur))
+                                  :autoFocus true}]]
       [:div.card {:on-click #(swap! cur assoc :editing true)} (:title card)])))
 
-(defn NewCard []
+(defn NewCard [colcur]
   [:div.new-card
+   {:on-click #(insert-new-card colcur)}
    "+ add new card"])
 
-(defn Column [col]
-  (let [{:keys [title cards editing]} @col]
+(defn Column [colcur]
+  (let [{:keys [title cards editing]} @colcur]
     [:div.column
      (if editing
        [:input {:type "text" :value title}]
        [:h2 title])
      (for [i (-> cards count range)
            :let [k (-> cards (get i) :id)]]
-       ^{:key k} [Card (r/cursor col [:cards i])])
-     [NewCard]]))
+       ^{:key k} [Card (r/cursor colcur [:cards i])])
+     [NewCard colcur]]))
 
 (defn NewColumn []
   [:div.new-column
@@ -52,6 +67,6 @@
      (for [i (-> columns count range)
            :let [k (-> columns (get i) :id)]]
        ^{:key k} [Column (r/cursor app-state [:columns i])])
-     [NewColumn]]))
+     [NewColumn ]]))
 
 (r/render [Board app-state] (js/document.getElementById "app"))
