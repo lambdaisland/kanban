@@ -30,16 +30,17 @@
   (let [{:keys [editing title]} @cursor]
     (if editing
       [el {:className "editing"} [:input {:type "text"
-                               :value title
-                               :autoFocus true
-                               :on-change #(update-title cursor (.. % -target -value))
-                               :on-blur #(stop-editing cursor)
-                               :on-key-press #(if (= (.-charCode %) 13)
-                                                (stop-editing cursor))}]]
+                                          :value title
+                                          :autoFocus true
+                                          :on-change #(update-title cursor (.. % -target -value))
+                                          :on-blur #(stop-editing cursor)
+                                          :on-key-press #(if (= (.-charCode %) 13)
+                                                           (stop-editing cursor))}]]
       [el {:on-click #(start-editing cursor)} title])))
 
 (defn Card [cursor]
   [Editable :div.card cursor])
+
 (defn add-new-card [col-cur]
   (swap! col-cur update :cards conj {:id (random-uuid)
                                      :title ""
@@ -53,9 +54,7 @@
 (defn Column [col-cur]
   (let [{:keys [title cards editing]} @col-cur]
     [:div.column
-     (if editing
-       [:input {:type "text" :value title :key "edit"}]
-       [:h2 {:key "title"} title])
+     ^{:key "title"} [Editable :h2 col-cur]
      (map-indexed (fn [idx {id :id}]
                     (let [card-cur (r/cursor col-cur [:cards idx])]
                       ^{:key id} [Card card-cur]))
