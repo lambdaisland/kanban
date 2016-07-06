@@ -20,7 +20,7 @@
 (defn- start-editing [card-cur]
   (swap! card-cur assoc :editing true))
 
-(defn Card [props card-cur]
+(defn Card [card-cur]
   (let [{:keys [editing title]} @card-cur]
     (if editing
       [:div.card.editing [:input {:type "text"
@@ -32,7 +32,7 @@
                                                    (stop-editing card-cur))}]]
       [:div.card {:on-click #(start-editing card-cur)} title])))
 
-(defn NewCard [props]
+(defn NewCard []
   [:div.new-card
    "+ add new card"])
 
@@ -44,8 +44,8 @@
        [:h2 {:key "title"} title])
      (for [idx (range (count cards))]
        (let [card-cur (r/cursor col-cur [:cards idx])]
-         [Card {:key idx} card-cur]))
-     [NewCard {:key "new"}]]))
+         ^{:key idx} [Card card-cur]))
+     ^{:key "new"} [NewCard]]))
 
 (defn NewColumn []
   [:div.new-column
@@ -55,7 +55,7 @@
   [:div.board
    (for [idx (range (count (:columns @board)))]
      (let [col-cur (r/cursor board [:columns idx])]
-       [Column col-cur]))
-   [NewColumn]])
+      ^{:key idx} [Column col-cur]))
+   ^{:key "new"} [NewColumn]])
 
 (r/render [Board app-state] (js/document.getElementById "app"))
