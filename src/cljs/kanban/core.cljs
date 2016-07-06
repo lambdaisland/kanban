@@ -12,10 +12,10 @@
                               {:title "Work out"}]}]}))
 
 (defn Card [card-cur]
-  (let [card @card-cur]
-    (if (:editing card)
-      [:div.card.editing [:input {:type "text" :value (:title card)}]]
-      [:div.card (:title card)])))
+  (let [{:keys [editing title]} @card-cur]
+    (if editing
+      [:div.card.editing [:input {:type "text" :value title}]]
+      [:div.card title])))
 
 (defn NewCard []
   [:div.new-card
