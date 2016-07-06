@@ -14,7 +14,9 @@
 (defn Card [card-cur]
   (let [{:keys [editing title]} @card-cur]
     (if editing
-      [:div.card.editing [:input {:type "text" :defaultValue title}]]
+      [:div.card.editing [:input {:type "text"
+                                  :value title
+                                  :on-change #(swap! card-cur assoc :title (.. % -target -value))}]]
       [:div.card {:on-click #(swap! card-cur assoc :editing true)} title])))
 
 (defn NewCard []
