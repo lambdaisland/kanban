@@ -11,3 +11,7 @@ card-atom ;;=> #<Atom: {:title "Hello Island!"}>
 (set-title! card-atom "Hello Turtles!")
 
 card-atom ;;=> #<Atom: {:title "Hello Turtles!"}>
+
+
+(def board (r/atom {:columns [{:cards []}
+                              {:cards [{:title "Hello Island!"}]}]}))
