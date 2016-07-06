@@ -4,12 +4,18 @@
 (enable-console-print!)
 
 (def app-state
-  (r/atom {:columns [{:title "Todos"
-                      :cards [{:title "Learn about Reagent"}
-                              {:title "Tell my friends about Lambda Island"}]}
-                     {:title "Awesomize"
-                      :cards [{:title "Meditate"}
-                              {:title "Work out"}]}]}))
+  (r/atom {:columns [{:id (random-uuid)
+                      :title "Todos"
+                      :cards [{:id (random-uuid)
+                               :title "Learn about Reagent"}
+                              {:id (random-uuid)
+                               :title "Tell my friends about Lambda Island"}]}
+                     {:id (random-uuid)
+                      :title "Awesomize"
+                      :cards [{:id (random-uuid)
+                               :title "Meditate"}
+                              {:id (random-uuid)
+                               :title "Work out"}]}]}))
 
 (defn- update-title [card-cur title]
   (swap! card-cur assoc :title title))
@@ -42,9 +48,10 @@
      (if editing
        [:input {:type "text" :value title :key "edit"}]
        [:h2 {:key "title"} title])
-     (for [idx (range (count cards))]
-       (let [card-cur (r/cursor col-cur [:cards idx])]
-         ^{:key idx} [Card card-cur]))
+     (map-indexed (fn [idx {id :id}]
+                    (let [card-cur (r/cursor col-cur [:cards idx])]
+                      ^{:key id} [Card card-cur]))
+                  cards)
      ^{:key "new"} [NewCard]]))
 
 (defn NewColumn []
@@ -53,9 +60,10 @@
 
 (defn Board [board]
   [:div.board
-   (for [idx (range (count (:columns @board)))]
-     (let [col-cur (r/cursor board [:columns idx])]
-      ^{:key idx} [Column col-cur]))
+   (map-indexed (fn [idx {id :id}]
+                  (let [col-cur (r/cursor board [:columns idx])]
+                    ^{:key id} [Column col-cur]))
+                (:columns @board))
    ^{:key "new"} [NewColumn]])
 
 (r/render [Board app-state] (js/document.getElementById "app"))
