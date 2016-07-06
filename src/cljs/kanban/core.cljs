@@ -8,10 +8,8 @@
                       :cards [{:title "Learn about Reagent"}
                               {:title "Tell my friends about Lambda Island"}]}
                      {:title "Awesomize"
-                      :editing true
                       :cards [{:title "Meditate"}
-                              {:title "Work out"
-                               :editing true}]}]}))
+                              {:title "Work out"}]}]}))
 
 (defn Card [card]
   (if (:editing card)
