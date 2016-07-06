@@ -36,10 +36,11 @@
   [:div.new-column
    "+ add new column"])
 
-(defn Board [state]
+(defn Board [board]
   [:div.board
-   (for [c (:columns @state)]
-     [Column c])
+   (for [idx (range (count (:columns @board)))]
+     (let [col-path [:columns idx]]
+       [Column board col-path]))
    [NewColumn]])
 
 (r/render [Board app-state] (js/document.getElementById "app"))
