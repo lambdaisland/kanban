@@ -26,7 +26,9 @@
       [:div.card.editing [:input {:type "text"
                                   :value title
                                   :on-change #(update-title card-cur (.. % -target -value))
-                                  :on-blur #(stop-editing card-cur)}]]
+                                  :on-blur #(stop-editing card-cur)
+                                  :on-key-press #(if (= (.-charCode %) 13)
+                                                   (stop-editing card-cur))}]]
       [:div.card {:on-click #(start-editing card-cur)} title])))
 
 (defn NewCard []
