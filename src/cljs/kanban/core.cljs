@@ -11,10 +11,11 @@
                       :cards [{:title "Meditate"}
                               {:title "Work out"}]}]}))
 
-(defn Card [card]
-  (if (:editing card)
-    [:div.card.editing [:input {:type "text" :value (:title card)}]]
-    [:div.card (:title card)]))
+(defn Card [card-cur]
+  (let [card @card-cur]
+    (if (:editing card)
+      [:div.card.editing [:input {:type "text" :value (:title card)}]]
+      [:div.card (:title card)])))
 
 (defn NewCard []
   [:div.new-card
@@ -26,8 +27,9 @@
      (if editing
        [:input {:type "text" :value title}]
        [:h2 title])
-     (for [c cards]
-       [Card c])
+     (for [idx (range (count cards))]
+       (let [card-cur (r/cursor col-cur [:cards idx])]
+         [Card card-cur]))
      [NewCard]]))
 
 (defn NewColumn []
