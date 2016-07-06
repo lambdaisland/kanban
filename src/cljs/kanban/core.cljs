@@ -17,6 +17,11 @@
                               {:id (random-uuid)
                                :title "Work out"}]}]}))
 
+(defn AutoFocusInput [props]
+  (r/create-class {:displayName "AutoFocusInput"
+                   :reagent-render (fn [props]
+                                     [:input props])}))
+
 (defn- update-title [cursor title]
   (swap! cursor assoc :title title))
 
@@ -29,13 +34,12 @@
 (defn Editable [el cursor]
   (let [{:keys [editing title]} @cursor]
     (if editing
-      [el {:className "editing"} [:input {:type "text"
-                                          :value title
-                                          :autoFocus true
-                                          :on-change #(update-title cursor (.. % -target -value))
-                                          :on-blur #(stop-editing cursor)
-                                          :on-key-press #(if (= (.-charCode %) 13)
-                                                           (stop-editing cursor))}]]
+      [el {:className "editing"} [AutoFocusInput {:type "text"
+                                                  :value title
+                                                  :on-change #(update-title cursor (.. % -target -value))
+                                                  :on-blur #(stop-editing cursor)
+                                                  :on-key-press #(if (= (.-charCode %) 13)
+                                                                   (stop-editing cursor))}]]
       [el {:on-click #(start-editing cursor)} title])))
 
 (defn Card [cursor]
