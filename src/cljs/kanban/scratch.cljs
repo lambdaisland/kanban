@@ -15,3 +15,9 @@ card-atom ;;=> #<Atom: {:title "Hello Turtles!"}>
 
 (def board (r/atom {:columns [{:cards []}
                               {:cards [{:title "Hello Island!"}]}]}))
+
+(get-in @board [])                  ;;=> {:columns [{:cards []} {:cards [{:title "Hello Island!"}]}]}
+(get-in @board [:columns])          ;;=> [{:cards []} {:cards [{:title "Hello Island!"}]}]
+(get-in @board [:columns 1])        ;;=> {:cards [{:title "Hello Island!"}]}
+(get-in @board [:columns 1 :cards]) ;;=> [{:title "Hello Island!"}]
+(get-in @board [:columns 1 :cards 0 :title]) ;;=> "Hello Island!"
