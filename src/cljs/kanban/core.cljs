@@ -20,8 +20,8 @@
   [:div.new-card
    "+ add new card"])
 
-(defn Column [board col-path]
-  (let [{:keys [title cards editing]} (get-in @board col-path)]
+(defn Column [col-cur]
+  (let [{:keys [title cards editing]} @col-cur]
     [:div.column
      (if editing
        [:input {:type "text" :value title}]
@@ -37,8 +37,8 @@
 (defn Board [board]
   [:div.board
    (for [idx (range (count (:columns @board)))]
-     (let [col-path [:columns idx]]
-       [Column board col-path]))
+     (let [col-cur (r/cursor board [:columns idx])]
+       [Column col-cur]))
    [NewColumn]])
 
 (r/render [Board app-state] (js/document.getElementById "app"))
