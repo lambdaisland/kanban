@@ -5,5 +5,12 @@
                               {:cards [{:title "Hello Island!"}]}]}))
 
 
-(r/cursor board [:columns 1])
-;;=> #<Cursor: [:columns 1] {:cards [{:title "Hello Island!"}]}>
+(def cards-cursor
+  (r/cursor board [:columns 0 :cards]))
+
+@cards-cursor
+
+(swap! cards-cursor conj {:title "New card in column 0"})
+
+@cards-cursor ;;=> [{:title "New card in column 0"}]
+@board ;;=> {:columns [{:cards [{:title "New card in column 0"}]} {:cards [{:title "Hello Island!"}]}]}
