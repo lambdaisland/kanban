@@ -19,6 +19,8 @@
 
 (defn AutoFocusInput [props]
   (r/create-class {:displayName "AutoFocusInput"
+                   :component-did-mount (fn [component]
+                                          (.focus (r/dom-node component)))
                    :reagent-render (fn [props]
                                      [:input props])}))
 
