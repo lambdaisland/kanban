@@ -60,8 +60,15 @@
                   cards)
      ^{:key "new"} [NewCard col-cur]]))
 
-(defn NewColumn []
+(defn- add-new-column [board]
+  (swap! board update :columns conj {:id (random-uuid)
+                                     :title ""
+                                     :cards []
+                                     :editing true}))
+
+(defn NewColumn [board]
   [:div.new-column
+   {:on-click #(add-new-column board)}
    "+ add new column"])
 
 (defn Board [board]
@@ -70,6 +77,6 @@
                   (let [col-cur (r/cursor board [:columns idx])]
                     ^{:key id} [Column col-cur]))
                 (:columns @board))
-   ^{:key "new"} [NewColumn]])
+   ^{:key "new"} [NewColumn board]])
 
 (r/render [Board app-state] (js/document.getElementById "app"))
