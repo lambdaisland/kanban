@@ -11,14 +11,23 @@
                       :cards [{:title "Meditate"}
                               {:title "Work out"}]}]}))
 
+(defn- update-title [card-cur title]
+  (swap! card-cur assoc :title title))
+
+(defn- stop-editing [card-cur]
+  (swap! card-cur dissoc :editing))
+
+(defn- start-editing [card-cur]
+  (swap! card-cur assoc :editing true))
+
 (defn Card [card-cur]
   (let [{:keys [editing title]} @card-cur]
     (if editing
       [:div.card.editing [:input {:type "text"
                                   :value title
-                                  :on-change #(swap! card-cur assoc :title (.. % -target -value))
-                                  :on-blur #(swap! card-cur dissoc :editing)}]]
-      [:div.card {:on-click #(swap! card-cur assoc :editing true)} title])))
+                                  :on-change #(update-title card-cur (.. % -target -value))
+                                  :on-blur #(stop-editing card-cur)}]]
+      [:div.card {:on-click #(start-editing card-cur)} title])))
 
 (defn NewCard []
   [:div.new-card
