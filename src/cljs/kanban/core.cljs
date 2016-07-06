@@ -17,27 +17,29 @@
                               {:id (random-uuid)
                                :title "Work out"}]}]}))
 
-(defn- update-title [card-cur title]
-  (swap! card-cur assoc :title title))
+(defn- update-title [cursor title]
+  (swap! cursor assoc :title title))
 
-(defn- stop-editing [card-cur]
-  (swap! card-cur dissoc :editing))
+(defn- stop-editing [cursor]
+  (swap! cursor dissoc :editing))
 
-(defn- start-editing [card-cur]
-  (swap! card-cur assoc :editing true))
+(defn- start-editing [cursor]
+  (swap! cursor assoc :editing true))
 
-(defn Card [card-cur]
-  (let [{:keys [editing title]} @card-cur]
+(defn Editable [el cursor]
+  (let [{:keys [editing title]} @cursor]
     (if editing
-      [:div.card.editing [:input {:type "text"
-                                  :value title
-                                  :autoFocus true
-                                  :on-change #(update-title card-cur (.. % -target -value))
-                                  :on-blur #(stop-editing card-cur)
-                                  :on-key-press #(if (= (.-charCode %) 13)
-                                                   (stop-editing card-cur))}]]
-      [:div.card {:on-click #(start-editing card-cur)} title])))
+      [el {:className "editing"} [:input {:type "text"
+                               :value title
+                               :autoFocus true
+                               :on-change #(update-title cursor (.. % -target -value))
+                               :on-blur #(stop-editing cursor)
+                               :on-key-press #(if (= (.-charCode %) 13)
+                                                (stop-editing cursor))}]]
+      [el {:on-click #(start-editing cursor)} title])))
 
+(defn Card [cursor]
+  [Editable :div.card cursor])
 (defn add-new-card [col-cur]
   (swap! col-cur update :cards conj {:id (random-uuid)
                                      :title ""
