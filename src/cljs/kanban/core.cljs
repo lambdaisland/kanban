@@ -22,14 +22,15 @@
   [:div.new-card
    "+ add new card"])
 
-(defn Column [{:keys [title cards editing]}]
-  [:div.column
-   (if editing
-     [:input {:type "text" :value title}]
-     [:h2 title])
-   (for [c cards]
-     [Card c])
-   [NewCard]])
+(defn Column [board col-path]
+  (let [{:keys [title cards editing]} (get-in @board col-path)]
+    [:div.column
+     (if editing
+       [:input {:type "text" :value title}]
+       [:h2 title])
+     (for [c cards]
+       [Card c])
+     [NewCard]]))
 
 (defn NewColumn []
   [:div.new-column
