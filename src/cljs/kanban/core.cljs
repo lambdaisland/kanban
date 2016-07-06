@@ -15,7 +15,7 @@
   (let [{:keys [editing title]} @card-cur]
     (if editing
       [:div.card.editing [:input {:type "text" :value title}]]
-      [:div.card title])))
+      [:div.card {:on-click #(swap! card-cur assoc :editing true)} title])))
 
 (defn NewCard []
   [:div.new-card
