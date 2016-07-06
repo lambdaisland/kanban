@@ -38,8 +38,14 @@
                                                    (stop-editing card-cur))}]]
       [:div.card {:on-click #(start-editing card-cur)} title])))
 
-(defn NewCard []
+(defn add-new-card [col-cur]
+  (swap! col-cur update :cards conj {:id (random-uuid)
+                                     :title ""
+                                     :editing true}))
+
+(defn NewCard [col-cur]
   [:div.new-card
+   {:on-click #(add-new-card col-cur)}
    "+ add new card"])
 
 (defn Column [col-cur]
@@ -52,7 +58,7 @@
                     (let [card-cur (r/cursor col-cur [:cards idx])]
                       ^{:key id} [Card card-cur]))
                   cards)
-     ^{:key "new"} [NewCard]]))
+     ^{:key "new"} [NewCard col-cur]]))
 
 (defn NewColumn []
   [:div.new-column
