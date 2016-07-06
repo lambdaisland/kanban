@@ -16,7 +16,8 @@
     (if editing
       [:div.card.editing [:input {:type "text"
                                   :value title
-                                  :on-change #(swap! card-cur assoc :title (.. % -target -value))}]]
+                                  :on-change #(swap! card-cur assoc :title (.. % -target -value))
+                                  :on-blur #(swap! card-cur dissoc :editing)}]]
       [:div.card {:on-click #(swap! card-cur assoc :editing true)} title])))
 
 (defn NewCard []
