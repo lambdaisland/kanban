@@ -25,6 +25,7 @@
     (if editing
       [:div.card.editing [:input {:type "text"
                                   :value title
+                                  :autoFocus true
                                   :on-change #(update-title card-cur (.. % -target -value))
                                   :on-blur #(stop-editing card-cur)
                                   :on-key-press #(if (= (.-charCode %) 13)
